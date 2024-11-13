@@ -142,3 +142,32 @@ Ir turėtų veikti, žinoma meta daug įspėjimų, bet veikia:
 
 <img width="1122" alt="Screenshot 2024-11-14 at 00 05 51" src="https://github.com/user-attachments/assets/1caf3e8a-c42e-4c54-8561-2a4a7ed169ec">
 
+4. Pakeiskite testo duomenis: Vietoj pateiktų transakcijų hash'ų, panaudokite hash'us iš laisvai pasirinkto Bitcoin bloko (pvz., naudodami blockchain explorer).
+Pasijungiam blockchain explorer'į ir išsirenkam bloką, pvz. 75000:
+
+<img width="1094" alt="Screenshot 2024-11-14 at 00 21 00" src="https://github.com/user-attachments/assets/0d1adf58-4a57-451d-a5b7-9d6fa82ce784">
+Jis turi 6 transakcijas: 
+<img width="1225" alt="Screenshot 2024-11-14 at 00 21 28" src="https://github.com/user-attachments/assets/e7eafd96-185d-45d0-b789-714418630119">
+
+Visas šias transakcijas įdedu į kodą: 
+
+<img width="934" alt="Screenshot 2024-11-14 at 00 24 20" src="https://github.com/user-attachments/assets/b531e195-8b91-4a9e-9bf2-0c9677d0c5b2">
+
+Jei paleidžiu kodą su neatkomentuota dalimi:
+
+<img width="851" alt="Screenshot 2024-11-14 at 00 28 09" src="https://github.com/user-attachments/assets/76df761a-dbe7-401a-9781-40a99ea8ee1c">
+
+Jei atkomentuoju merkle root hash-2:
+<img width="839" alt="Screenshot 2024-11-14 at 00 28 55" src="https://github.com/user-attachments/assets/56ff3c9d-9672-4064-81fd-4faf7ef62198">
+Merkle Root Hash-2 atitinka šio bloko transakcijų merkle root hash'ą:
+
+<img width="643" alt="Screenshot 2024-11-14 at 00 29 42" src="https://github.com/user-attachments/assets/7e583d83-1dc3-4a84-8f68-9eae174d034b">
+
+5. Kadangi mano projektas yra įgyvendinamas naudojant C++17 standartą, create_merkle funkcijos integravimas tampa techniškai problemiškas. Ši funkcija naudoja std::unary_function, kuri buvo pašalinta pradedant nuo C++17 standarto. Dėl šios priežasties funkcijos veikimas su C++17 standartu nėra įmanomas be reikšmingų pakeitimų pačioje funkcijoje arba mano projekto keitimo.
+
+Jei aš paleisčiau programą su create_merkle, naudodama c++17 standartą, tai gaunu klaidą:
+`clang++ -std=c++17 -o blockchain main.cpp $(pkg-config --cflags --libs libbitcoin-system)`
+
+<img width="619" alt="Screenshot 2024-11-14 at 00 41 39" src="https://github.com/user-attachments/assets/3beea0c7-32f5-449a-9918-5fe3da2aa1da">
+
+<img width="302" alt="Screenshot 2024-11-14 at 00 42 06" src="https://github.com/user-attachments/assets/51c385f1-3034-4925-b72d-a8738cbe6c26">
