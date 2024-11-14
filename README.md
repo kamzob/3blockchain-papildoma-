@@ -174,21 +174,30 @@ Jei aš paleisčiau programą su create_merkle, naudodama c++17 standartą, tai 
 
 # 3 papildoma
 1. Visų pirma prisijungiu prie VU mazgo:
+   
    <img width="577" alt="Screenshot 2024-11-14 at 01 01 57" src="https://github.com/user-attachments/assets/23754569-7bf5-41c0-8a84-571b2017b344">
+   
    Instaliuoju:
+   
 <img width="583" alt="Screenshot 2024-11-14 at 01 30 36" src="https://github.com/user-attachments/assets/407c538f-465f-457c-afe6-7ec1f8ba473b">
 
-2. Išbandymas
+3. Išbandymas
    ### rpc_example.py:
    Parasiau nano rpc_example.py -> Idejau duota koda:
+   
 <img width="561" alt="Screenshot 2024-11-14 at 01 06 15" src="https://github.com/user-attachments/assets/893aae5a-a037-46e2-9974-70483954dfb1">
+
 Tada paspaudziau Y
 Rasiau `python3 rpc_example.py`
 Ir gavau:
+
 <img width="429" alt="Screenshot 2024-11-14 at 01 31 42" src="https://github.com/user-attachments/assets/a7c28f49-9e26-4708-8378-d0a6c12abfc4">
+
 ### rpc_transaction.py :
 Vel rasau nano rpc_transaction.py:
+
 <img width="576" alt="Screenshot 2024-11-14 at 01 33 29" src="https://github.com/user-attachments/assets/ddf27040-99d3-4e5d-acd0-53a8e2f6b46c">
+
 Idejau koda:
 ```
 # `rpc_transaction.py` example
@@ -275,7 +284,9 @@ for vout in decoded_tx['vout']:
 mokestis = iejimuVerte - isejimuVerte
 print("Transakcijos mokestis (BTC):", mokestis)
 ```
+
 Pirmas bandymas: 
+
 <img width="367" alt="Screenshot 2024-11-14 at 02 38 59" src="https://github.com/user-attachments/assets/0c3a3510-db3d-4331-b2d3-6641f0d85333">
 
 <img width="504" alt="Screenshot 2024-11-14 at 02 39 20" src="https://github.com/user-attachments/assets/1c9b2498-66ab-49f0-a110-4ee773fbb58b">
@@ -318,30 +329,33 @@ def calculate_block_hash(version, prev_block_hash, merkle_root, timestamp, bits,
     return b2lx(block_hash)
 
 # Bloko header'io duomenys
-version = 0x2cc00000
-prev_block_hash = "00000000000000001eb3e9714ff83e78d16f4ab912ff4e472036c39279e2eaaf"
-merkle_root = "997a8a864372bc9ee2633ab1de2533982d7392fc6b0625bfd19f2e9d0e5ff460"
-timestamp = 1731110526
+version = 541982720
+prev_block_hash = "00000000000000000000f55f8711b65b03d7183274ce03c3b6fc02f6447be214"
+merkle_root = "c4aeb9eb144cd342de2848222ee8b22acbbfc2e7167fbbeafd89444f50f4b980"
+timestamp = 1731440597
 bits = 0x1702c4e4
-nonce = 2391832617
-known_block_hash = "0000000000000000000143083c2a2cdf4eea6edf5b21fabc47a5f1c94d435cde"
+nonce = 3194788449
+known_block_hash = "000000000000000000026bed0a517f047ff6153438ee4095f931bebb4c5fa307"
 
 # Apskaiciuojam bloko hash
 calculated_hash = calculate_block_hash(version, prev_block_hash, merkle_root, timestamp, bits, nonce)
 
 # Pateikiam rezultata
-print("Calculated Hash:", calculated_hash)
-print("Known Block Hash:", known_block_hash)
+print("Suskaiciuotas hash:", calculated_hash)
+print("Tikrasis Block Hash:", known_block_hash)
 if calculated_hash == known_block_hash:
-    print("The block hash is correctly calculated.")
+    print("Bloko hash suskaiciuotas teisingai.")
 else:
-    print("The block hash is incorrect.")
+    print("Bloko hash suskaiciutoas neteisingai.")
+
+
 ```
 Po dau bandymu pavyko!!!!
 
 <img width="618" alt="Screenshot 2024-11-14 at 04 02 53" src="https://github.com/user-attachments/assets/1272c9e7-e37c-432e-a9dc-2443ff50a5ac">
 
 Geras saltinis bloku informacijai:
+
 https://bitcoinexplorer.org/block-height/870035#JSON 
 
 Naudojau #870035 bloka
