@@ -171,3 +171,112 @@ Jei aš paleisčiau programą su create_merkle, naudodama c++17 standartą, tai 
 <img width="619" alt="Screenshot 2024-11-14 at 00 41 39" src="https://github.com/user-attachments/assets/3beea0c7-32f5-449a-9918-5fe3da2aa1da">
 
 <img width="302" alt="Screenshot 2024-11-14 at 00 42 06" src="https://github.com/user-attachments/assets/51c385f1-3034-4925-b72d-a8738cbe6c26">
+
+# 3 papildoma
+1. Visų pirma prisijungiu prie VU mazgo:
+   <img width="577" alt="Screenshot 2024-11-14 at 01 01 57" src="https://github.com/user-attachments/assets/23754569-7bf5-41c0-8a84-571b2017b344">
+   Instaliuoju:
+<img width="583" alt="Screenshot 2024-11-14 at 01 30 36" src="https://github.com/user-attachments/assets/407c538f-465f-457c-afe6-7ec1f8ba473b">
+
+2. Išbandymas
+   ### rpc_example.py:
+   Parasiau nano rpc_example.py -> Idejau duota koda:
+<img width="561" alt="Screenshot 2024-11-14 at 01 06 15" src="https://github.com/user-attachments/assets/893aae5a-a037-46e2-9974-70483954dfb1">
+Tada paspaudziau Y
+Rasiau `python3 rpc_example.py`
+Ir gavau:
+<img width="429" alt="Screenshot 2024-11-14 at 01 31 42" src="https://github.com/user-attachments/assets/a7c28f49-9e26-4708-8378-d0a6c12abfc4">
+### rpc_transaction.py :
+Vel rasau nano rpc_transaction.py:
+<img width="576" alt="Screenshot 2024-11-14 at 01 33 29" src="https://github.com/user-attachments/assets/ddf27040-99d3-4e5d-acd0-53a8e2f6b46c">
+Idejau koda:
+```
+# `rpc_transaction.py` example
+  from bitcoin.rpc import RawProxy
+  # Create a connection to local Bitcoin Core node
+  p = RawProxy()
+  # Alice's transaction ID
+  txid = "0627052b6f28912f2703066a912ea577f2ce4da4caa5a5fbd8a57286c345c2f2"
+  # First, retrieve the raw transaction in hex
+  raw_tx = p.getrawtransaction(txid)
+  # Decode the transaction hex into a JSON object
+  decoded_tx = p.decoderawtransaction(raw_tx)
+  # Retrieve each of the outputs from the transaction
+  for output in decoded_tx['vout']:
+      print(output['scriptPubKey']['address'], output['value'])
+```
+
+<img width="430" alt="Screenshot 2024-11-14 at 01 38 33" src="https://github.com/user-attachments/assets/5c9f18bc-4ea6-42fb-a40e-430ea630cc89">
+
+### rpc_block.py
+Idejau koda:
+```
+from bitcoin.rpc import RawProxy
+
+# Create a connection to the local Bitcoin Core node
+p = RawProxy()
+
+# The block height where Alice's transaction was recorded
+blockheight = 277316
+
+# Get the block hash of the block with height 277316
+blockhash = p.getblockhash(blockheight)
+
+# Retrieve the block by its hash
+block = p.getblock(blockhash)
+
+# Element tx contains the list of all transaction IDs in the block
+transactions = block['tx']
+block_value = 0
+
+# Iterate through each transaction ID in the block
+for txid in transactions:
+    tx_value = 0
+    # Retrieve the raw transaction by ID
+    raw_tx = p.getrawtransaction(txid)
+    # Decode the transaction
+    decoded_tx = p.decoderawtransaction(raw_tx)
+    # Iterate through each output in the transaction
+    for output in decoded_tx['vout']:
+        # Add up the value of each output
+        tx_value += output['value']
+    # Add the value of this transaction to the total
+    block_value += tx_value
+
+print("Total output value (in BTC) in block #277316:", block_value)
+
+```
+Gavau atsakyma: 
+
+<img width="526" alt="Screenshot 2024-11-14 at 02 05 50" src="https://github.com/user-attachments/assets/f75177d4-e9a5-4000-8181-967527f6a639">
+3. 
+
+Kodas:
+```
+from bitcoin.rpc import RawProxy
+p = RawProxy()
+txid = "707e86e5e2356cb53a2edf0be391d56cfc998bcfa05a13a5772ef474c5eba105"
+raw_tx = p.getrawtransaction(txid)
+decoded_tx = p.decoderawtransaction(raw_tx)
+
+iejimuVerte = 0
+for vin in decoded_tx['vin']:
+        prev_txid = vin['txid']
+        vout_index = vin['vout']
+
+        prev_raw_tx = p.getrawtransaction(prev_txid)
+        prev_decoded_tx = p.decoderawtransaction(prev_raw_tx)
+        iejimuVerte +=  prev_decoded_tx['vout'][vout_index]['value']
+
+isejimuVerte = 0
+for vout in decoded_tx['vout']:
+        isejimuVerte += vout['value']
+
+mokestis = iejimuVerte - isejimuVerte
+print("Transakcijos mokestis (BTC):", mokestis)
+```
+<img width="367" alt="Screenshot 2024-11-14 at 02 38 59" src="https://github.com/user-attachments/assets/0c3a3510-db3d-4331-b2d3-6641f0d85333">
+<img width="504" alt="Screenshot 2024-11-14 at 02 39 20" src="https://github.com/user-attachments/assets/1c9b2498-66ab-49f0-a110-4ee773fbb58b">
+
+
+   
