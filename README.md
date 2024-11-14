@@ -275,8 +275,81 @@ for vout in decoded_tx['vout']:
 mokestis = iejimuVerte - isejimuVerte
 print("Transakcijos mokestis (BTC):", mokestis)
 ```
+Pirmas bandymas: 
 <img width="367" alt="Screenshot 2024-11-14 at 02 38 59" src="https://github.com/user-attachments/assets/0c3a3510-db3d-4331-b2d3-6641f0d85333">
+
 <img width="504" alt="Screenshot 2024-11-14 at 02 39 20" src="https://github.com/user-attachments/assets/1c9b2498-66ab-49f0-a110-4ee773fbb58b">
 
+Kadangi ten buvo transakcijos mokestis 0, bandau kita:
+
+<img width="383" alt="Screenshot 2024-11-14 at 02 53 47" src="https://github.com/user-attachments/assets/53e388d7-bf0c-4171-a7e1-5f7419fb8260">
+
+<img width="622" alt="Screenshot 2024-11-14 at 02 54 23" src="https://github.com/user-attachments/assets/9afd7d3a-f0f3-452d-a26e-980245384516">
+
+2019-09-06 įvykusi transakcija:
+
+<img width="373" alt="Screenshot 2024-11-14 at 02 56 57" src="https://github.com/user-attachments/assets/fef77261-226e-4665-b9b9-47206dfa0a9c">
+
+<img width="397" alt="Screenshot 2024-11-14 at 02 59 00" src="https://github.com/user-attachments/assets/8c3d2e9d-eb35-41dd-86a5-5c73dda15f7a">
 
    
+4. Patikrinkite bloko hash'ą: Parašykite programą, kuri patikrina, ar bloko hash'as yra teisingai apskaičiuotas pagal bloko header'io informaciją.
+Kodas:
+```
+import hashlib
+from bitcoin.core import lx, b2lx
+
+def calculate_block_hash(version, prev_block_hash, merkle_root, timestamp, bits, nonce):
+    # Sukuriame bloko header'i naudodami little-endian formata, kaip reikalauja Bitcoin protokolas
+    header = (
+        version.to_bytes(4, 'little') +
+        lx(prev_block_hash) +
+        lx(merkle_root) +
+        timestamp.to_bytes(4, 'little') +
+        bits.to_bytes(4, 'little') +
+        nonce.to_bytes(4, 'little')
+    )
+    
+    # Atliekame dviguba SHA-256 hash'a kad gautume bloko hash'a
+    hash1 = hashlib.sha256(header).digest()
+    block_hash = hashlib.sha256(hash1).digest()
+    
+    # Konvertuojame i big-endian formata ir graziname kaip teksta
+    return b2lx(block_hash)
+
+# Bloko header'io duomenys
+version = 0x2cc00000
+prev_block_hash = "00000000000000001eb3e9714ff83e78d16f4ab912ff4e472036c39279e2eaaf"
+merkle_root = "997a8a864372bc9ee2633ab1de2533982d7392fc6b0625bfd19f2e9d0e5ff460"
+timestamp = 1731110526
+bits = 0x1702c4e4
+nonce = 2391832617
+known_block_hash = "0000000000000000000143083c2a2cdf4eea6edf5b21fabc47a5f1c94d435cde"
+
+# Apskaiciuojam bloko hash
+calculated_hash = calculate_block_hash(version, prev_block_hash, merkle_root, timestamp, bits, nonce)
+
+# Pateikiam rezultata
+print("Calculated Hash:", calculated_hash)
+print("Known Block Hash:", known_block_hash)
+if calculated_hash == known_block_hash:
+    print("The block hash is correctly calculated.")
+else:
+    print("The block hash is incorrect.")
+```
+Po dau bandymu pavyko!!!!
+
+<img width="618" alt="Screenshot 2024-11-14 at 04 02 53" src="https://github.com/user-attachments/assets/1272c9e7-e37c-432e-a9dc-2443ff50a5ac">
+
+Geras saltinis bloku informacijai:
+https://bitcoinexplorer.org/block-height/870035#JSON 
+
+Naudojau #870035 bloka
+
+ <img width="876" alt="Screenshot 2024-11-14 at 04 04 09" src="https://github.com/user-attachments/assets/755fcabd-d908-4e12-9c5a-0c5468db1276">
+
+
+<img width="1221" alt="Screenshot 2024-11-14 at 04 04 34" src="https://github.com/user-attachments/assets/767d96a9-69f6-4867-90ac-016c6553ec31">
+
+
+
